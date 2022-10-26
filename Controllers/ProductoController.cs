@@ -27,7 +27,6 @@ namespace PrimerTrabajoConAPI.Controllers
             return  ADO_Producto.CrearProducto(producto);
         }
 
-
         //Modifico un producto dada la info del objeto Producto
         [HttpPut("ModificarProducto")]
         public bool ModificarProducto([FromBody] Producto producto)
