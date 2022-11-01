@@ -8,9 +8,6 @@ namespace PrimerTrabajoConAPI.Controllers
     [ApiController]
     public class ProductoController : Controller
     {
-        public ProductoController()
-        {
-        }
 
         //Traigo un producto dado el ID del mismo
         [HttpGet("TraerProducto")]

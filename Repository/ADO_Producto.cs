@@ -26,6 +26,7 @@ namespace PrimerTrabajoConAPI.Repository
                             //string codigo, string descripcion, double precioDeVenta, double precioDeCompra, string categoria, int stock)
 
                             p = new Producto(dr.GetInt64(0).ToString(), dr.GetString(1), Convert.ToDouble(dr.GetDecimal(2)), Convert.ToDouble(dr.GetDecimal(3)), Convert.ToInt32(dr.GetValue(4)), Convert.ToInt32(dr.GetValue(5)));
+
                             
                         }
                     }
@@ -98,6 +99,8 @@ namespace PrimerTrabajoConAPI.Repository
         }
 
         public static bool ModificarProducto (Producto p)
+        //Metodo para Modificar un producto
+
         {
             string error = ValidarDatos(p);
             if (string.IsNullOrEmpty(error))
@@ -116,6 +119,7 @@ namespace PrimerTrabajoConAPI.Repository
             
         }
         public static bool EliminarProducto(int id)
+        // Metodo para Eliminar un producto dado su ID
         {
             bool eliminado = true;
 
@@ -127,29 +131,21 @@ namespace PrimerTrabajoConAPI.Repository
                 var comando = new SqlCommand("Select * from Producto where id =" + id, connection);
                 using (SqlDataReader dr = comando.ExecuteReader())
                 {
-                    if (dr.HasRows)
-                    {
-
-                    }
-                    else
+                    if (!dr.HasRows)
                     {
                         eliminado = false;
-                        return eliminado;
+                        
                     }
                 }
                 connection.Close();
-            }
-            var query = "DELETE FROM ProductoVendido Where idProducto=" + id;
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (SqlCommand comandoCreate = new SqlCommand(query, connection))
+                if (eliminado==false)
                 {
-                    comandoCreate.ExecuteNonQuery();
+                    return eliminado;
                 }
-                connection.Close();
             }
-            query = "DELETE FROM Producto Where id=" + id;
+            ADO_ProductoVendido.EliminarProductoVendido(id);
+           
+            string query = "DELETE FROM Producto Where id=" + id;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -164,6 +160,8 @@ namespace PrimerTrabajoConAPI.Repository
 
 
         public static string ValidarDatos (Producto p)
+        //Metodo que valida si la info de un producto es correcta.
+
         {
             //Primero reviso que los datos ingresados sean validos (stock, descripcion, user ID)
             //Metodo aparte porque se usa en otros dos metodos y asi se evita repetir codigo.
@@ -210,7 +208,9 @@ namespace PrimerTrabajoConAPI.Repository
         }
 
 
-        public static void ModificarCrearProducto(Producto p, string query)
+        private static void ModificarCrearProducto(Producto p, string query)
+        //Metodo interno usado para no repetir codigo al Modificar o crear un producto
+
         {
             string connectionString = "Server=W0447;Database=Master; Trusted_connection=True;";
             

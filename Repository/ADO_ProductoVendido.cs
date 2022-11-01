@@ -1,4 +1,6 @@
 ﻿using System.Data.SqlClient;
+using System.Diagnostics.Tracing;
+using PrimerTrabajoConAPI.Models;
 
 namespace PrimerTrabajoConAPI.Repository
 {
@@ -6,78 +8,24 @@ namespace PrimerTrabajoConAPI.Repository
     {
         
         
-        /*
-        protected int _idProductoVendido;
-        protected int _idVenta;
-        protected int _cantidadVendida;
-        protected int _idProducto;
-        protected string _descripcion;
-        protected double _precioDeVenta;
-        protected double _precioDeCompra;
-        protected int _stock;
-        protected int _idUsuario;
-
-        public ADO_ProductoVendido()
-        //Constructor con toda la info
+        public static List<ProductoVendido> TraerProductosVendidosPorIdVenta(int idVenta)
+        //Metodo que recive una ID de una venta y retorna una lista de productos vendidos en esa transaccion
         {
-            _idProductoVendido = 0;
-            _idVenta = 0;
-            _cantidadVendida = 0;
-            _idProducto = 0;
-            _descripcion = string.Empty;
-            _precioDeVenta = 0;
-            _precioDeCompra = 0;
-            _stock = 0;
-            _idUsuario = 0;
-        }
-
-        public ADO_ProductoVendido(int idProductoVendido, int cantidadVendida, int idVenta, int idProducto, string descripciones, double precioDeVenta, double precioDeCompra, int stock, int idUsuario)
-        //Constructor con toda la info
-        {
-            //, int stock, int idUsuario)
-            _idProductoVendido = idProductoVendido;
-            _idVenta = idVenta;
-            _cantidadVendida = cantidadVendida;
-            _idProducto = idProducto;
-            _descripcion = descripciones;
-            _precioDeVenta = precioDeVenta;
-            _precioDeCompra = precioDeCompra;
-            _stock = stock;
-            _idUsuario = idUsuario;
-
-        }
-
-        public List<ADO_ProductoVendido> TraerProductosVendidosPorIdVenta(int idVenta)
-        //Metodo que recive un UserID y retorna una lista de productos vendidos asignados a ese usuario
-        {
-            List<ADO_ProductoVendido> listaProductosVendidos = new List<ADO_ProductoVendido> { };
+            List<ProductoVendido> listaProductosVendidos = new List<ProductoVendido> { };
 
 
             string connectionString = "Server=W0447;Database=Master; Trusted_connection=True;";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var comando = new SqlCommand("Select * from ProductoVendido  INNER JOIN " +
-                    "Producto on ProductoVendido.IdProducto = Producto.Id WHERE idVenta = '" + idVenta + "'", connection);
+                var comando = new SqlCommand("Select * from ProductoVendido  WHERE idVenta = '" + idVenta + "'", connection);
                 using (SqlDataReader dr = comando.ExecuteReader())
                 {
                     if (dr.HasRows)
                     {
                         while (dr.Read())
                         {
-                            //int idProductoVendido 0, int cantidadVendida 1, int idVenta 3, string idProducto 2, string descripciones 5, double precioDeVenta 6, double precioDeCompra7, int stock 8, int idUsuario 9
-                            int test = (int)dr.GetInt64(0);
-                            int test1 = dr.GetInt32(1);
-                            int test2 = Convert.ToInt32(dr.GetValue(3));
-                            int test3 = (int)dr.GetInt64(2);
-                            string test4 = dr.GetString(5);
-                            double test5 = Convert.ToDouble(dr.GetDecimal(6));
-                            double test6 = Convert.ToDouble(dr.GetDecimal(7));
-                            int test7 = Convert.ToInt32(dr.GetValue(8));
-                            int test8 = Convert.ToInt32(dr.GetValue(9));
-
-
-                            ADO_ProductoVendido p = new ADO_ProductoVendido((int)dr.GetInt64(0), dr.GetInt32(1), Convert.ToInt32(dr.GetValue(3)), (int)dr.GetInt64(2), dr.GetString(5), Convert.ToDouble(dr.GetDecimal(6)), Convert.ToDouble(dr.GetDecimal(7)), Convert.ToInt32(dr.GetValue(8)), Convert.ToInt32(dr.GetValue(9)));
+                            ProductoVendido p = new ProductoVendido((int)dr.GetInt64(0), dr.GetInt32(1), Convert.ToInt32(dr.GetValue(3)), (int)dr.GetInt64(2));
                             listaProductosVendidos.Add(p);
                         }
                     }
@@ -90,26 +38,26 @@ namespace PrimerTrabajoConAPI.Repository
 
 
 
-        public List<ADO_Producto> TraerProductosVendidos(int idUsuario)
+        public List<Producto> TraerProductosVendidos(int idUsuario)
         //Metodo que recive un UserID y retorna una lista de productos vendidos asignados a ese usuario
         {
             string query = "";
             bool agregado = false;
-            List<ADO_Producto> productos = new List<ADO_Producto> { };
-            var listaProductos = ADO_Producto.TraerProducto(idUsuario);
+            List<Producto> productos = new List<Producto> { };
+            var listaProductos = ADO_Producto.TraerProductoByUserID(idUsuario);
             var listaProductosVendidos = productos;
-            foreach (ADO_Producto p in listaProductos)
+            foreach (Producto p in listaProductos)
             {
-                if (idUsuario == p.GetIdUsuario())
+                if (idUsuario == p.IdUsuario)
                 {
                     if (agregado)
                     {
-                        query = query + "," + p.GetIdProducto();
+                        query = query + "," + p.IdProducto;
                     }
                     else
                     {
                         agregado = true;
-                        query = p.GetIdProducto();
+                        query = p.IdProducto;
                     }
                 }
             }
@@ -127,7 +75,7 @@ namespace PrimerTrabajoConAPI.Repository
                         while (dr.Read())
                         {
                             //string codigo, string descripcion, double precioDeVenta, double precioDeCompra, string categoria, int stock)
-                            ADO_Producto p = new ADO_Producto(dr.GetInt64(0).ToString(), dr.GetString(5), Convert.ToDouble(dr.GetDecimal(7)), Convert.ToDouble(dr.GetDecimal(6)), Convert.ToInt32(dr.GetValue(2)), Convert.ToInt32(dr.GetValue(8)));
+                            Producto p = new Producto(dr.GetInt64(0).ToString(), dr.GetString(5), Convert.ToDouble(dr.GetDecimal(7)), Convert.ToDouble(dr.GetDecimal(6)), Convert.ToInt32(dr.GetValue(2)), Convert.ToInt32(dr.GetValue(8)));
                             listaProductosVendidos.Add(p);
                         }
                     }
@@ -137,23 +85,101 @@ namespace PrimerTrabajoConAPI.Repository
 
             return listaProductosVendidos;
         }
-        public int GetIdProductoVendido()
+
+        public static bool EliminarProductoVendido(int id)
         {
-            return _idProductoVendido;
-        }
-        public int GetIdVenta()
-        {
-            return _idVenta;
-        }
-        public int GetCantidadVendida()
-        {
-            return _cantidadVendida;
+            //Devuelvo el stock a la tabla del producto 
+            //Estoy asumiendo que al cancelar la venta se estan devolviendo los productos
+            ProductoVendido p = TraerProductoVendido(id);
+            Producto prod = ADO_Producto.TraerProducto(p.IdProducto);
+            prod.Stock = p.CantidadVendida + prod.Stock;
+            ADO_Producto.ModificarProducto(prod);
+
+            string connectionString = "Server=W0447;Database=Master; Trusted_connection=True;";
+            string query = "DELETE FROM ProductoVendido Where idProducto=" + id;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand comandoCreate = new SqlCommand(query, connection))
+                {
+                    comandoCreate.ExecuteNonQuery();
+                }
+            connection.Close();
+            }
+            return true;
+            
         }
 
-        public string GetDescipcion()
+        public static bool ModificarProductoVendido(ProductoVendido p)
         {
-            return _descripcion;
+
+            //Metodo para modificar un producto Vendido. Solo se puede modificar la cantidad vendida.
+            try
+            {
+                string connectionString = "Server=W0447;Database=Master; Trusted_connection=True;";
+                string query = "UPDATE ProductoVendido Set Stock = " + p.CantidadVendida + ",idProducto=" + p.IdProducto +
+                    " WHERE id=" + p.IdProductoVendido;
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand comandoCreate = new SqlCommand(query, connection))
+                    {
+                        comandoCreate.ExecuteNonQuery();
+                    }
+                    connection.Close();
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
-        */
+
+        //MEtodo al que dado un ID de producto retorna el objego ProductoVendido con la info cargada
+        public static ProductoVendido TraerProductoVendido (int idProducto)
+        {
+            ProductoVendido producto = new ProductoVendido();
+            string connectionString = "Server=W0447;Database=Master; Trusted_connection=True;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var comando = new SqlCommand("Select * from ProductoVendido Where producto.id =" + idProducto);
+                    
+                using (SqlDataReader dr = comando.ExecuteReader())
+                {
+                    if (dr.HasRows)
+                    {
+                        while (dr.Read())
+                        {
+                            producto = new ProductoVendido((int)dr.GetInt64(0), dr.GetInt32(1), Convert.ToInt32(dr.GetValue(3)), (int)dr.GetInt64(2));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return producto;
+        }
+
+        //Metodo para cargar un productovendido a la DB
+        public static bool CrearProductoVendido(ProductoVendido p)
+        {
+            var connectionString = "Server=W0447;Database=Master; Trusted_connection=True;";
+            string query = "INSERT into ProductoVendido (stock, IdProducto, IdVenta) Values (" + p.CantidadVendida + "," + p.IdProducto + "," + p.IdVenta + ")";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand comandoUpdate = new SqlCommand(query, connection))
+                {
+                    comandoUpdate.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+            return true;
+        }
+
+
+
     }
 }

@@ -19,7 +19,7 @@ namespace PrimerTrabajoConAPI.Models
 
         //Properties
 
-        public int IdPRoductoVendido { get { return _idProductoVendido; } set { _idProductoVendido = value; } }
+        public int IdProductoVendido { get { return _idProductoVendido; } set { _idProductoVendido = value; } }
         public int IdVenta { get { return _idVenta; } set { _idVenta = value; } }
         public int CantidadVendida { get { return _cantidadVendida; } set { _cantidadVendida = value; } }
         public int IdProducto { get { return _idProducto; } set { _idProducto = value; } }
@@ -27,7 +27,7 @@ namespace PrimerTrabajoConAPI.Models
 
 
         public ProductoVendido()
-        //Constructor con toda la info
+        //Constructor x defecto
         {
             _idProductoVendido = 0;
             _idVenta = 0;

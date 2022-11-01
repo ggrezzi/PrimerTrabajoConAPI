@@ -10,10 +10,6 @@ namespace PrimerTrabajoConAPI.Controllers
     public class UsuarioController : ControllerBase
     {
         
-        public UsuarioController()
-        { 
-        }
-
         //Trae un usuario dado un ID
         [HttpGet("TraerUsuario")]
         public Usuario Consultar(int id)
@@ -28,6 +24,21 @@ namespace PrimerTrabajoConAPI.Controllers
         {
             return  ADO_Usuario.ModificarUsuario(usuario);
         }
+
+        //Modifica un usario - Se puede modificar cualquier dato en el objeto menos el ID.
+        [HttpPost("CrearUsuario")]
+        public bool CrearUsuario([FromBody] Usuario u)
+        {
+            return ADO_Usuario.CrearUsuario(u);
+        }
+
+        //Modifica un usario - Se puede modificar cualquier dato en el objeto menos el ID.
+        [HttpDelete("EliminarUsuario")]
+        public bool EliminarUsuario([FromBody] int id)
+        {
+            return ADO_Usuario.EliminarUsuario(id);
+        }
+
 
 
     }
