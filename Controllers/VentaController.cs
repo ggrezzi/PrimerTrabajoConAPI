@@ -9,10 +9,10 @@ namespace PrimerTrabajoConAPI.Controllers
     public class VentaController : Controller
     {
         //Traigo Venta - REcibo un ID de usuario y traigo una lista de ventas de ese usuario
-        [HttpGet("TrearVenta")]
-        public List<Venta>  TraearVenta(int userId)
+        [HttpGet("{idUsuario}")]
+        public List<Venta>  TraearVenta(int idUsuario)
         {
-            return ADO_Venta.TraerVentas(userId);
+            return ADO_Venta.TraerVentas(idUsuario);
             //return true;
         }
 
@@ -26,10 +26,10 @@ namespace PrimerTrabajoConAPI.Controllers
         }
 
         //Elimino Venta - Recibo un ID de venta y la borro, si da error devuelvo FALSE
-        [HttpDelete("EliminarVenta")]
-        public bool EliminarVenta(int id)
+        [HttpDelete("{idVenta}")]
+        public bool EliminarVenta(int idVenta)
         { 
-            return ADO_Venta.EliminarVenta(id);
+            return ADO_Venta.EliminarVenta(idVenta);
             //return true;
         }
     }

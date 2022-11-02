@@ -38,7 +38,7 @@ namespace PrimerTrabajoConAPI.Repository
 
 
 
-        public List<Producto> TraerProductosVendidos(int idUsuario)
+        public static List<Producto> TraerProductosVendidos(int idUsuario)
         //Metodo que recive un UserID y retorna una lista de productos vendidos asignados a ese usuario
         {
             string query = "";

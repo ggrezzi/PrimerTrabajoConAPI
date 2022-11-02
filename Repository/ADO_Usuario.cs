@@ -25,12 +25,12 @@ namespace PrimerTrabajoConAPI.Repository
                         while (dr.Read())
                         {
                             var usuario = new Usuario();
-                            usuario.Id = (int) dr.GetInt64(0);
+                            usuario.id = (int) dr.GetInt64(0);
                             usuario.Nombre = dr.GetString(1);
                             usuario.Apellido = dr.GetString(2);
                             usuario.NombreUsuario = dr.GetString(3);
-                            usuario.Password = dr.GetString(4);
-                            usuario.Email = dr.GetString(5);
+                            usuario.Contraseña = dr.GetString(4);
+                            usuario.Mail = dr.GetString(5);
                             listaUsuarios.Add(usuario);
                         }
                     }
@@ -39,7 +39,7 @@ namespace PrimerTrabajoConAPI.Repository
                 return listaUsuarios;
             }
         }
-        public static Usuario TraerUsuario(int id)
+        public static Usuario TraerUsuario(string userName)
         //Metodo al que se le ingresa un UserNAme y devuelve el objeto Usuario correspondiente (A)
         {
             var usuario = new Usuario();
@@ -48,19 +48,19 @@ namespace PrimerTrabajoConAPI.Repository
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var comando = new SqlCommand("Select * from Usuario WHERE id=" + id, connection);
+                var comando = new SqlCommand("Select * from Usuario WHERE nombreUsuario='" + userName+"'", connection);
                 using (SqlDataReader dr = comando.ExecuteReader())
                 {
                     if (dr.HasRows)
                     {
                         while (dr.Read())
                         {
-                            usuario.Id = (int)dr.GetInt64(0);
+                            usuario.id = (int)dr.GetInt64(0);
                             usuario.Nombre = dr.GetString(1);
                             usuario.Apellido = dr.GetString(2);
                             usuario.NombreUsuario = dr.GetString(3);
-                            usuario.Password = dr.GetString(4);
-                            usuario.Email = dr.GetString(5);
+                            usuario.Contraseña = dr.GetString(4);
+                            usuario.Mail = dr.GetString(5);
                         }
                     }
                 }
@@ -78,7 +78,7 @@ namespace PrimerTrabajoConAPI.Repository
             //coroboro que el email tenga un formato valido
             try
             {
-                MailAddress m = new MailAddress(usu.Email);
+                MailAddress m = new MailAddress(usu.Mail);
                 validEmail = true;
 
             }
@@ -100,7 +100,7 @@ namespace PrimerTrabajoConAPI.Repository
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var comando = new SqlCommand("Select * from Usuario WHERE id=" + usu.Id, connection);
+                var comando = new SqlCommand("Select * from Usuario WHERE id=" + usu.id, connection);
                 using (SqlDataReader dr = comando.ExecuteReader())
                 {
                     if (dr.HasRows)
@@ -195,18 +195,37 @@ namespace PrimerTrabajoConAPI.Repository
         public static bool CrearUsuario(Usuario u)
         {
             bool valid = false;
-            Usuario test = IniciarSesion(u.NombreUsuario, u.Password);
-            if (test.Id==0)
+            Usuario test = IniciarSesion(u.NombreUsuario, u.Contraseña);
+            if (test.id==0)
             {
-                valid = IsMailValid(u.Email);
+                valid = IsMailValid(u.Mail);
             }
             else
             {
                 return false;
             }
+            var tempUser = TraerUsuario(u.NombreUsuario);
+            if (tempUser.id!=0)
+            {
+                return false;
+            }
+            string connectionString = "Server=W0447;Database=Master; Trusted_connection=True;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var comando = new SqlCommand("Select * from Usuario WHERE =mail'" + u.Mail + "'", connection);
+                using (SqlDataReader dr = comando.ExecuteReader())
+                {
+                    if (dr.HasRows)
+                    {
+                        valid = false;
+                    }
+                }
+                connection.Close();
+            }
             if (valid)
             {
-                if (u.Nombre.Length>0 && u.NombreUsuario.Length>0 && u.Apellido.Length>0 && u.Password.Length>0)
+                if (u.Nombre.Length>0 && u.NombreUsuario.Length>0 && u.Apellido.Length>0 && u.Contraseña.Length>0)
                 {
                     var query = "INSERT into Usuario values(@nombre, @apellido,@nombreUsuario, @password, @mail )";
                     ModificarCrearUsuario(u, query);
@@ -231,7 +250,7 @@ namespace PrimerTrabajoConAPI.Repository
                 var parametroId = new SqlParameter();
                 parametroId.ParameterName = "id";
                 parametroId.SqlDbType = System.Data.SqlDbType.Int;
-                parametroId.Value = usu.Id;
+                parametroId.Value = usu.id;
                 var parametroNombre = new SqlParameter();
                 parametroNombre.ParameterName = "nombre";
                 parametroNombre.SqlDbType = System.Data.SqlDbType.VarChar;
@@ -247,11 +266,11 @@ namespace PrimerTrabajoConAPI.Repository
                 var parametroPassword = new SqlParameter();
                 parametroPassword.ParameterName = "password";
                 parametroPassword.SqlDbType = System.Data.SqlDbType.VarChar;
-                parametroPassword.Value = usu.Password;
+                parametroPassword.Value = usu.Contraseña;
                 var parametroMail = new SqlParameter();
                 parametroMail.ParameterName = "mail";
                 parametroMail.SqlDbType = System.Data.SqlDbType.VarChar;
-                parametroMail.Value = usu.Email;
+                parametroMail.Value = usu.Mail;
 
                 connection.Open();
                 using (SqlCommand comandoUpdate = new SqlCommand(query, connection))

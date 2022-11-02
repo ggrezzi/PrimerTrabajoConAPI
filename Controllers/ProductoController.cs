@@ -10,14 +10,14 @@ namespace PrimerTrabajoConAPI.Controllers
     {
 
         //Traigo un producto dado el ID del mismo
-        [HttpGet("TraerProducto")]
-        public Producto Consultar(int id)
+        [HttpGet("{idUsuario}")]
+        public List<Producto> TraerProductoByUserID(int idUsuario)
         {
-            return ADO_Producto.TraerProducto(id);
+            return ADO_Producto.TraerProductoByUserID(idUsuario);
         }
 
         //Creo un producto dada toda la info del mismo (el ID se crea automatico en la DB)
-        [HttpPost("CrearProducto")]
+        [HttpPost]
         public string CrearProducto([FromBody] Producto producto)
 
         {
@@ -25,7 +25,7 @@ namespace PrimerTrabajoConAPI.Controllers
         }
 
         //Modifico un producto dada la info del objeto Producto
-        [HttpPut("ModificarProducto")]
+        [HttpPut]
         public bool ModificarProducto([FromBody] Producto producto)
 
         {
@@ -33,12 +33,16 @@ namespace PrimerTrabajoConAPI.Controllers
         }
 
         //Elimino producto dado el ID del mismo
-        [HttpDelete("EliminarProducto")]
-        public bool EliminarProducto([FromBody] int id)
+        [HttpDelete("{idProducto}")]
+        public bool EliminarProducto(int idProducto)
 
         {
-            return ADO_Producto.EliminarProducto(id);
+            return ADO_Producto.EliminarProducto(idProducto);
         }
+
+
+
+
 
     }
 }

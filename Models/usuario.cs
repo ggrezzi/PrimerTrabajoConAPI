@@ -16,18 +16,18 @@ namespace PrimerTrabajoConAPI.Models
         private string _nombre;
         private string _apellido;
         private string _nombreUsuario;
-        private string _password;
-        private string _email;
+        private string _contraseña;
+        private string _mail;
 
 
         //Properties
 
-        public long Id { get { return _idUsuario; } set { _idUsuario = value; } }
+        public long id { get { return _idUsuario; } set { _idUsuario = value; } }
         public string Nombre { get { return _nombre; } set { _nombre = value; } }
         public string Apellido { get { return _apellido; } set { _apellido = value; } }
         public string NombreUsuario { get { return _nombreUsuario; } set { _nombreUsuario = value; } }
-        public string Password { get { return _password; } set { _password = value; } }
-        public string Email { get { return _email; } set { _email = value; } }
+        public string Contraseña { get { return _contraseña; } set { _contraseña = value; } }
+        public string Mail { get { return _mail; } set { _mail = value; } }
 
         //Constructor por defecto
         public Usuario()
@@ -36,8 +36,8 @@ namespace PrimerTrabajoConAPI.Models
             _nombre = string.Empty;
             _apellido = string.Empty;
             _nombreUsuario = string.Empty;
-            _password = string.Empty;
-            _email = string.Empty; 
+            _contraseña = string.Empty;
+            _mail = string.Empty; 
 
         }
 
@@ -48,8 +48,8 @@ namespace PrimerTrabajoConAPI.Models
             _nombre = nombre;
             _apellido = apellido;
             _nombreUsuario = nombreUsuario;
-            _password = password;
-            _email = email;
+            _contraseña = password;
+            _mail = email;
         }
 
 

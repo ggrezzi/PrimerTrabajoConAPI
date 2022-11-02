@@ -10,13 +10,13 @@ namespace PrimerTrabajoConAPI.Controllers
     public class ProductoVendidoController : Controller
     {
         //Ingreso in ID de un producto vendido y retorno el objeto productoVendido
-        [HttpGet("TraerProductoVendido")]
-        public ProductoVendido Consultar(int id)
+        [HttpGet("{idUsuario}")]
+        public List<Producto> TraerProductoVendido(int idUsuario)
         {
-            return ADO_ProductoVendido.TraerProductoVendido(id);
+            return ADO_ProductoVendido.TraerProductosVendidos(idUsuario);
         }
 
-
+        /*
         //Elimino producto dado el IVendidoD del mismo
         [HttpDelete("EliminarProductoVendido")]
         public bool EliminarProductoVendido([FromBody] int id)
@@ -38,6 +38,7 @@ namespace PrimerTrabajoConAPI.Controllers
         {
             return ADO_ProductoVendido.CrearProductoVendido(p);
         }
+        */
 
     }
 }
