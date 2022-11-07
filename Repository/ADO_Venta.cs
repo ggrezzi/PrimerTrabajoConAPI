@@ -123,7 +123,6 @@ namespace PrimerTrabajoConAPI.Repository
                     }
                 }
                 connection.Close();
-
             }
             return traerVentas;
         }
@@ -161,7 +160,7 @@ namespace PrimerTrabajoConAPI.Repository
             listaProductos = ADO_ProductoVendido.TraerProductosVendidosPorIdVenta(id);
             foreach (ProductoVendido p in listaProductos)
             {
-                ADO_ProductoVendido.EliminarProductoVendido(p.IdProductoVendido);
+                ADO_ProductoVendido.EliminarProductoVendido(p.Id);
             }
             
             string query = "DELETE Venta where id=" + id;

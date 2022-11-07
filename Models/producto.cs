@@ -5,7 +5,7 @@ namespace PrimerTrabajoConAPI.Models
 {
     public class Producto
     {
-        private string _idProducto;
+        private int _id;
         private string _descripciones;
         private int _idUsuario;
         private double _precioDeCompra;
@@ -14,11 +14,11 @@ namespace PrimerTrabajoConAPI.Models
 
         //Properties
 
-        public string IdProducto { get { return _idProducto; } set { _idProducto = value; } }
+        public int Id { get { return _id; } set { _id = value; } }
         public string Descripciones { get { return _descripciones; } set { _descripciones = value; } }
         public int IdUsuario { get { return _idUsuario; } set { _idUsuario = value; } }
-        public double PrecioDeCompra { get { return _precioDeCompra; } set { _precioDeCompra = value; } }
-        public double PrecioDeVenta { get { return _precioDeVenta; } set { _precioDeVenta = value; } }
+        public double Costo { get { return _precioDeCompra; } set { _precioDeCompra = value; } }
+        public double PrecioVenta { get { return _precioDeVenta; } set { _precioDeVenta = value; } }
         public int Stock { get { return _stock; } set { _stock = value; } }
 
 
@@ -28,7 +28,7 @@ namespace PrimerTrabajoConAPI.Models
 
         public  Producto()
         {
-            _idProducto = string.Empty;
+            _id = 0;
             _descripciones = string.Empty;
             _precioDeCompra = 0;
             _precioDeVenta = 0;
@@ -39,9 +39,9 @@ namespace PrimerTrabajoConAPI.Models
         }
 
         //Constructor con toda la info
-        public Producto(string idProducto, string descripciones, double precioDeVenta, double precioDeCompra, int stock, int idUsuario)
+        public Producto(int idProducto, string descripciones, double precioDeVenta, double precioDeCompra, int stock, int idUsuario)
         {
-            _idProducto = idProducto;
+            _id = idProducto;
             _descripciones = descripciones;
             _precioDeCompra = precioDeCompra;
             _precioDeVenta = precioDeVenta;

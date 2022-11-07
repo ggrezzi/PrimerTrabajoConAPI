@@ -70,26 +70,17 @@ namespace PrimerTrabajoConAPI.Repository
         }
 
         //Metodo para modificar la info de un usuario - Se puede modificar todo menos el ID
-        public static string  ModificarUsuario(Usuario usu)
+        public static bool  ModificarUsuario(Usuario usu)
         {
 
             string respuesta = string.Empty;
             bool validEmail;
             //coroboro que el email tenga un formato valido
-            try
-            {
-                MailAddress m = new MailAddress(usu.Mail);
-                validEmail = true;
+            validEmail = IsMailValid(usu.Mail);
 
-            }
-            catch (FormatException)
-            {
-                validEmail = false;
-            }
             if (validEmail != true)
             {
-                respuesta = "wrong email format";
-                return respuesta;
+                return false;
             }
             bool existe = false;
 
@@ -117,12 +108,13 @@ namespace PrimerTrabajoConAPI.Repository
                 var query = "UPDATE Usuario Set Nombre=@nombre, Apellido=@apellido, " +
                                 " nombreUsuario=@nombreUsuario, Contraseña=@password, Mail=@mail WHERE id=@id";
                 ModificarCrearUsuario(usu, query);
+                return true;
             }
             else
             {
-                respuesta = "usuario no encontrado";
+                return false;
             }
-            return respuesta;
+            
         }
 
 

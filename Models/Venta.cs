@@ -23,7 +23,7 @@ namespace PrimerTrabajoConAPI.Models
         //Properties
 
         public string Comentario { get { return _comentario; } set { _comentario = value; } }
-        public int IdVenta { get { return _idVenta; } set { _idVenta = value; } }
+        public int Id { get { return _idVenta; } set { _idVenta = value; } }
         public int IdUsuario { get { return _idUsuario; } set { _idUsuario = value; } }
         public List <ProductoVendido> ListaProductosVendidos { get { return _listaProductosVendidos; } set { _listaProductosVendidos = value; } }
 

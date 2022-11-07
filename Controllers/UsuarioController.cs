@@ -13,9 +13,9 @@ namespace PrimerTrabajoConAPI.Controllers
 
         //Trae un usuario dado un UserName
         [HttpGet("{nombreUsuario}")]
-        public Usuario Consultar([Required] string userName)
+        public Usuario Consultar([Required] string nombreUsuario)
         {
-            return ADO_Usuario.TraerUsuario(userName);
+            return ADO_Usuario.TraerUsuario(nombreUsuario);
         }
 
         //Inicio de Sesion
@@ -28,7 +28,7 @@ namespace PrimerTrabajoConAPI.Controllers
 
         //Modifica un usario - Se puede modificar cualquier dato en el objeto menos el ID.
         [HttpPut]
-        public string Modificar([FromBody] Usuario usuario)
+        public bool Modificar([FromBody] Usuario usuario)
 
         {
             return  ADO_Usuario.ModificarUsuario(usuario);

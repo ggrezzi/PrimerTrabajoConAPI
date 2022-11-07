@@ -18,7 +18,7 @@ namespace PrimerTrabajoConAPI.Controllers
 
         //Creo un producto dada toda la info del mismo (el ID se crea automatico en la DB)
         [HttpPost]
-        public string CrearProducto([FromBody] Producto producto)
+        public bool CrearProducto([FromBody] Producto producto)
 
         {
             return  ADO_Producto.CrearProducto(producto);

@@ -52,12 +52,12 @@ namespace PrimerTrabajoConAPI.Repository
                 {
                     if (agregado)
                     {
-                        query = query + "," + p.IdProducto;
+                        query = query + "," + p.Id;
                     }
                     else
                     {
                         agregado = true;
-                        query = p.IdProducto;
+                        query = p.Id.ToString();
                     }
                 }
             }
@@ -75,7 +75,7 @@ namespace PrimerTrabajoConAPI.Repository
                         while (dr.Read())
                         {
                             //string codigo, string descripcion, double precioDeVenta, double precioDeCompra, string categoria, int stock)
-                            Producto p = new Producto(dr.GetInt64(0).ToString(), dr.GetString(5), Convert.ToDouble(dr.GetDecimal(7)), Convert.ToDouble(dr.GetDecimal(6)), Convert.ToInt32(dr.GetValue(2)), Convert.ToInt32(dr.GetValue(8)));
+                            Producto p = new Producto((int)dr.GetInt64(0), dr.GetString(5), Convert.ToDouble(dr.GetDecimal(7)), Convert.ToDouble(dr.GetDecimal(6)), Convert.ToInt32(dr.GetValue(2)), Convert.ToInt32(dr.GetValue(8)));
                             listaProductosVendidos.Add(p);
                         }
                     }
@@ -118,7 +118,7 @@ namespace PrimerTrabajoConAPI.Repository
             {
                 string connectionString = "Server=W0447;Database=Master; Trusted_connection=True;";
                 string query = "UPDATE ProductoVendido Set Stock = " + p.CantidadVendida + ",idProducto=" + p.IdProducto +
-                    " WHERE id=" + p.IdProductoVendido;
+                    " WHERE id=" + p.Id;
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();

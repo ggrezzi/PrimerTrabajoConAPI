@@ -7,7 +7,7 @@ namespace PrimerTrabajoConAPI.Repository
     public class ADO_Producto
     {
         public static Producto TraerProducto(int id)
-        //Metodo que recibe un UserID y retorna una lista de productos asignados a ese usuario
+        //Metodo que recibe un ID y retorna el producto con ese ID
         {
 
             var p = new Producto();
@@ -25,7 +25,7 @@ namespace PrimerTrabajoConAPI.Repository
                         {
                             //string codigo, string descripcion, double precioDeVenta, double precioDeCompra, string categoria, int stock)
 
-                            p = new Producto(dr.GetInt64(0).ToString(), dr.GetString(1), Convert.ToDouble(dr.GetDecimal(2)), Convert.ToDouble(dr.GetDecimal(3)), Convert.ToInt32(dr.GetValue(4)), Convert.ToInt32(dr.GetValue(5)));
+                            p = new Producto((int) dr.GetInt64(0), dr.GetString(1), Convert.ToDouble(dr.GetDecimal(2)), Convert.ToDouble(dr.GetDecimal(3)), Convert.ToInt32(dr.GetValue(4)), Convert.ToInt32(dr.GetValue(5)));
 
                             
                         }
@@ -54,7 +54,7 @@ namespace PrimerTrabajoConAPI.Repository
                     {
                         while (dr.Read())
                         {
-                            Producto p = new Producto(dr.GetInt64(0).ToString(), dr.GetString(1), Convert.ToDouble(dr.GetDecimal(2)), Convert.ToDouble(dr.GetDecimal(3)), Convert.ToInt32(dr.GetValue(4)), Convert.ToInt32(dr.GetValue(5)));
+                            Producto p = new Producto((int) dr.GetInt64(0), dr.GetString(1), Convert.ToDouble(dr.GetDecimal(2)), Convert.ToDouble(dr.GetDecimal(3)), Convert.ToInt32(dr.GetValue(4)), Convert.ToInt32(dr.GetValue(5)));
                             listaProductos.Add(p);
                         }
                     }
@@ -64,13 +64,11 @@ namespace PrimerTrabajoConAPI.Repository
             }
         }
         
-        public static string CrearProducto(Producto p)
+        public static bool CrearProducto(Producto p)
         //Metodo para crear u producto desde 0
         {
             //Primero reviso que los datos ingresados sean validos (stock, descripcion, user ID)
             string error = ValidarDatos(p);
-
-
             if (string.IsNullOrEmpty(error))
             {
                 string connectionString = "Server=W0447;Database=Master; Trusted_connection=True;";
@@ -94,8 +92,12 @@ namespace PrimerTrabajoConAPI.Repository
                     }
                     connection.Close();
                 }
+                return true;
             }
-            return error;
+            else
+            {
+                return false;
+            }
         }
 
         public static bool ModificarProducto (Producto p)
@@ -107,7 +109,7 @@ namespace PrimerTrabajoConAPI.Repository
             {
                 var query = "UPDATE Producto Set Descripciones = @desc, " +
                 "Costo=@costo, PrecioVenta=@venta, Stock=@stock, idUSuario=@idUsuario " +
-                "WHERE id=" + p.IdProducto;
+                "WHERE id=" + p.Id;
                 ModificarCrearProducto(p, query);
                 return true;
             }
@@ -196,11 +198,11 @@ namespace PrimerTrabajoConAPI.Repository
                     connection.Close();
                 }
             }
-            if (p.PrecioDeVenta <= p.PrecioDeCompra)
+            if (p.PrecioVenta <= p.Costo)
             {
                 error = "El precio de venta debe ser mayor al costo del producto";
             }
-            if (p.PrecioDeCompra <= 0)
+            if (p.Costo <= 0)
             {
                 error = "EL costo del producto no puede ser menor o igual a 0";
             }
@@ -223,11 +225,11 @@ namespace PrimerTrabajoConAPI.Repository
                 var parametroCosto = new SqlParameter();
                 parametroCosto.ParameterName = "costo";
                 parametroCosto.SqlDbType = System.Data.SqlDbType.Decimal;
-                parametroCosto.Value = p.PrecioDeCompra;
+                parametroCosto.Value = p.Costo;
                 var parametroVenta = new SqlParameter();
                 parametroVenta.ParameterName = "venta";
                 parametroVenta.SqlDbType = System.Data.SqlDbType.Decimal;
-                parametroVenta.Value = p.PrecioDeVenta;
+                parametroVenta.Value = p.PrecioVenta;
                 var parametroStock = new SqlParameter();
                 parametroStock.ParameterName = "stock";
                 parametroStock.SqlDbType = System.Data.SqlDbType.Int;
